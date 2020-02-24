@@ -2,7 +2,7 @@
 
 First off, I want to give a shoutout to <a href='https://gist.github.com/rtt/10403467#file-tinder-api-documentation-md'>@rtt</a> who initially posted the Tinder API Documentation that I found most of these endpoints on. I am writing this to provide a more up-to-date resource for working with the Tinder API.
 
-**Note: This was updated in February 2018 so it might be outdated.**
+**Note: This was updated in June 2018 so it might be outdated.**
 
 ### API Details
 <table>
@@ -79,6 +79,12 @@ Note: All curls must be sent with the headers as well (the only exception is tha
          <td>Send Message to that id</td>
          <td>{"message": TEXT GOES HERE}</td>
          <td>POST</td>
+      </tr>
+      <tr>
+         <td>/user/matches/match_id</td>
+         <td>Unmatch person</td>
+         <td>{}</td>
+         <td>DELETE</td>
       </tr>
       <tr>
          <td>/user/_id</td>
@@ -189,6 +195,12 @@ Note: All curls must be sent with the headers as well (the only exception is tha
          <td>GET</td>
       </tr>
       <tr>
+         <td>/v2/meta</td>
+         <td>Get your own meta data from V2 API (extra data like "top_picks" info)</td>
+         <td>{}</td>
+         <td>GET</td>
+      </tr>
+      <tr>
          <td>/report/_id</td>
          <td>Report someone --&gt; There are only a few accepted causes... (see tinder_api.py for options)</td>
          <td>{"cause": cause, "text": explanation}</td>
@@ -272,6 +284,30 @@ Note: All curls must be sent with the headers as well (the only exception is tha
          <td>{}</td>
          <td>POST</td>
       </tr>
+      <tr>
+         <td>/v2/fast-match/preview</td>
+         <td>Get the non blurred thumbnail image shown in the messages-window (the one showing the likes you received)</td>
+         <td>{}</td>
+         <td>GET</td>
+      </tr>
+      <tr>
+         <td>/v2/fast-match/count</td>
+         <td>Get the number of likes you received</td>
+         <td>{}</td>
+         <td>GET</td>
+      </tr>
+      <tr>
+         <td>/giphy/trending?limit={limit}</td>
+         <td>Get the trending gifs (tinder uses giphy) accessible in chat</td>
+         <td>{}</td>
+         <td>GET</td>
+      </tr>
+      <tr>
+         <td>/giphy/search?limit={limit}&query={query}</td>
+         <td>Get gifs (tinder uses giphy) based on a search accessible in chat</td>
+         <td>{}</td>
+         <td>GET</td>
+      </tr>
    </tbody>
 </table>
 
@@ -303,6 +339,11 @@ Note: All curls must be sent with the headers as well (the only exception is tha
 		<tr>
 			<td>404</td>
 			<td>The server didn't find the resource you tried to access.</td>
+		</tr>
+		<tr>
+			<td>503</td>
+			<td>Back-end server is at capacity.</td>
+		</tr>
 	</tbody>
 </table>
 
@@ -312,7 +353,7 @@ Note: All curls must be sent with the headers as well (the only exception is tha
 
 Simply input your facebook username/email and password in your config file. Then, the fb_auth_token.py module will programmatically retrieve your facebook_access_token and fb_user_id. These are then used to generate your tinder_auth_token in tinder_api.py which grants you access to your data! Happy Swiping!
 <br>
-<h5><strong> SMS Authentication </strong></h5>
+<h5><strong> SMS Authentication (implemented by <a href='https://github.com/Tagge'>@Tagge</a>) </strong></h5>
 SMS authentication is even easier. Just run phone_auth_token.py . You'll be asked your phone number at runtime, you'll then have to type in the code you received by SMS, and it will return your token. We didn't directly implement it in the tinder_api.py because, as opposed to Facebook auth, there's a rate limit to the number of SMS you can receive in an hour (actually 60). It's therefore better to get your token once and use it within its lifetime (24 hours) rather than asking for a new one everytime.<br>
 With your token ready, add it to tinder_config_ex.py (value for tinder_token). You're now ready to roll !
 
